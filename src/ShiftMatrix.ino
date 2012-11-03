@@ -21,9 +21,15 @@ int color = 6;
 
 
 void whitefull() {
-  drawBox(white,8,0,0,7,7);
+  drawBox(blue,brightness(8),0,0,23,23); 
   flushBuffer();
   clearBuffer();
+  delay(2000);
+  drawBox(green,brightness(8),0,0,23,23);
+  drawBox(red,brightness(8),0,0,23,23); 
+  flushBuffer();
+  clearBuffer();
+  delay(2000);
 }
 
 /********************************** TRI-FADE **********************************\

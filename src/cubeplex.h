@@ -51,9 +51,12 @@
 // Define the full brightness of the LEDs
 #define FULL 8
 
+
+
+
 // Define the size of the LED matrix
-#define MATRIX_WIDTH 8
-#define MATRIX_HEIGHT 8
+#define MATRIX_WIDTH 24
+#define MATRIX_HEIGHT 24
 #define BUFFERSIZE MATRIX_WIDTH * MATRIX_HEIGHT * 3
 
 int rowSize = MATRIX_WIDTH;
@@ -67,9 +70,16 @@ int displaySize = MATRIX_WIDTH * MATRIX_HEIGHT;
 
 char * _display_buffer;
 
+// 
+char oncontext = 0x0F;
+char offcontext = 0xF0;
 
 bool continuePattern = false;
 
+char brightness(int intBrightness) {
+  char trimmedBrightness = intBrightness && 0x0F;
+  return offcontext==0x0F?trimmedBrightness:trimmedBrightness<<4;
+}
 
 int correctBrightness (int oldBrightness) {
   return oldBrightness << 4;
@@ -109,10 +119,10 @@ void initDisplay() {
   digitalWrite(SHIFT_OUT_GREEN, LOW);
   digitalWrite(SHIFT_OUT_BLUE, LOW);
   
-  
-  
+ 
+   
   // Configure Interrupt for color display
-  setTimer2Prescaler(8);
+  setTimer2Prescaler(32);
   enableTimer2OverflowInterrupt();
   setTimer2Mode (TIMER2_NORMAL);
   
@@ -131,7 +141,7 @@ void initDisplay() {
 \******************************************************************************/
 void clearBuffer () {
   for (int i = 0; i < BUFFERSIZE; i++) {
-    _display_buffer[i] &= 0x0F;
+    _display_buffer[i] &= oncontext;
   }
 }
 
@@ -305,12 +315,12 @@ void flushBuffer() {
 int currentRow = 0;
 ISR(TIMER2_OVF_vect) {
   //digitalWrite(13,HIGH);
-  for (int i = 0; i < MATRIX_HEIGHT; i++) {
+  for (int i = 0; i < MATRIX_WIDTH; i++) {
     // set RED BLUE and GREEN
     PORTD &= ~0x3C;
-    PORTD |= _display_buffer[i+currentRow*rowSize+0*displaySize]!=0?0x10:0x00; // RED
-    PORTD |= _display_buffer[i+currentRow*rowSize+1*displaySize]!=0?0x04:0x00; // BLUE
-    PORTD |= _display_buffer[i+currentRow*rowSize+2*displaySize]!=0?0x08:0x00; // GREEN
+    PORTD |= (_display_buffer[i+currentRow*rowSize+0*displaySize]&oncontext)!=0?0x10:0x00; // RED
+    PORTD |= (_display_buffer[i+currentRow*rowSize+1*displaySize]&oncontext)!=0?0x04:0x00; // BLUE
+    PORTD |= (_display_buffer[i+currentRow*rowSize+2*displaySize]&oncontext)!=0?0x08:0x00; // GREEN
     // shift the common row
     PORTD |= i==currentRow?0x20:0x00; // COMMON
     // CLOCK PULSE
