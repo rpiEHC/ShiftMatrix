@@ -1,0 +1,22 @@
+#ifndef _MAPPINGS_H_
+#define _MAPPINGS_H_
+
+
+#define SHIFT_OUT_RED    4
+#define SHIFT_OUT_BLUE   2
+#define SHIFT_OUT_GREEN  3
+#define SHIFT_OUT_COMMON 5
+#define CLEAR            7
+#define CLOCK            8
+#define REGESTER_CLOCK   9
+#define ENABLE           6
+
+
+                //Dig0 Dig1 Dig2 Dig3 Dig4 Dig5 Dig6 Dig7 Dig8 Dig9 Dg10 Dg11 Dg12 Dg13
+int portmapB[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x02,0x04,0x08,0x10,0x20};
+int portmapD[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x00,0x00,0x00,0x00,0x00,0x00};
+
+
+
+
+#endif
