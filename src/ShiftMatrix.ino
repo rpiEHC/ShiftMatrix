@@ -9,27 +9,102 @@ void setup () {
   //flushBuffer();
 }
 void loop() {
+  //digitalWrite()
   //trifade();
-  //planarSpin();
+  planarSpin();
   //chaseTheDot();
-
-  whitefull();
+  //everyColor();
+  //whitefull();
+  //kevinTest();
+  //lineTest();
 }
 
 int color = 6;
 
 
+void kevinTest() {
+  for (int i = 0; i < 24; i++) {
+    drawLed(yellow, brightness(8), 0, i);
+      flushBuffer();
+  clearBuffer();
+  delay(1000);
+  }
+}
+
+void lineTest() {
+  //drawLed(blue,brightness(8),0,0);
+  //drawLed(green,brightness(8),23,23);
+  drawLine(white, brightness(8), 0,21, 23, 21);
+  flushBuffer();
+  clearBuffer();
+
+}
 
 void whitefull() {
-  drawBox(blue,brightness(8),0,0,23,23); 
+  int size = 23;
+  int delayTime = 1000;
+  
+  // drawBox(blue,brightness(8),0,0,size,size); 
+  // flushBuffer();
+  // clearBuffer();
+  // delay(delayTime);
+
+  // drawBox(green,brightness(8),0,0,size,size);
+  // flushBuffer();
+  // clearBuffer();
+  // delay(delayTime);
+
+  // drawBox(red,brightness(8),0,0,size,size); 
+  // flushBuffer();
+  // clearBuffer();
+  // delay(delayTime);
+
+  // drawBox(teal,brightness(8),0,0,size,size); 
+  // flushBuffer();
+  // clearBuffer();
+  // delay(delayTime);
+
+  // drawBox(purple,brightness(8),0,0,size,size); 
+  // flushBuffer();
+  // clearBuffer();
+  // delay(delayTime);
+
+  drawBox(white,brightness(8),0,0,size,size); 
   flushBuffer();
   clearBuffer();
-  delay(2000);
-  drawBox(green,brightness(8),0,0,23,23);
-  drawBox(red,brightness(8),0,0,23,23); 
-  flushBuffer();
-  clearBuffer();
-  delay(2000);
+  delay(delayTime);
+
+  // drawBox(white,brightness(8),0,0,size,size); 
+  // flushBuffer();
+  // clearBuffer();
+  // delay(delayTime);
+}
+
+void everyColor() {
+  for (int i = 0; i < 24; i++) {
+    for (int j = 0; j < 24; j++) {
+      drawLed(red,brightness(8),i,j);
+      flushBuffer();
+      clearBuffer();
+      //delay();
+    }
+  }
+  for (int i = 0; i < 24; i++) {
+    for (int j = 0; j < 24; j++) {
+      drawLed(green,brightness(8),i,j);
+      flushBuffer();
+      clearBuffer();
+      //(1000);
+    }
+  }
+  for (int i = 0; i < 24; i++) {
+    for (int j = 0; j < 24; j++) {
+      drawLed(blue,brightness(8),i,j);
+      flushBuffer();
+      clearBuffer();
+      //delay(1000);
+    }
+  }
 }
 
 /********************************** TRI-FADE **********************************\
@@ -78,7 +153,7 @@ void trifade() {
 \******************************************************************************/
 void chaseTheDot() {
   continuePattern = true;
-  int animationSpeed = 100;
+  int animationSpeed = 1;
   
   int xpos = 0;
   int ypos = 0;
@@ -89,7 +164,7 @@ void chaseTheDot() {
         if (xpos > 0) {xpos--;break;}
         else color=nextColor(color);
       case 1:
-        if (xpos < 3) {xpos++;break;}
+        if (xpos < 23) {xpos++;break;}
         else color=nextColor(color);
         xpos--; break;
         
@@ -97,12 +172,12 @@ void chaseTheDot() {
         if (ypos > 0) {ypos--;break;}
         else color=nextColor(color);
       case 3:
-        if (ypos < 3) {ypos++;break;}
+        if (ypos < 23) {ypos++;break;}
         else color=nextColor(color);
         ypos--; break;
       
     }
-    drawLed(color,xpos,ypos);
+    drawLed(color,brightness(8),xpos,ypos);
     flushBuffer();
     clearBuffer();
     delay(animationSpeed);
@@ -117,25 +192,28 @@ void chaseTheDot() {
 \******************************************************************************/
 void planarSpin() {
   continuePattern = true;
-  int animationSpeed = 100;
+  int animationSpeed = 0;
   int spinsPerColor = 5; // a spin is actually half a revolution
+  color = yellow;
   while (continuePattern) {
     int x = 0;
     int y = 0;
     for (int i = 0; i < spinsPerColor; i++) {
-      for (int x = 0; x < 3; x++) {
-        drawLine(color,x,0,3-x,3);
+      for (int x = 0; x < 23; x++) {
+        drawLine(color,brightness(8),x,0,23-x,23);
         flushBuffer();
         clearBuffer();
         delay(animationSpeed);
       }
-      for (int y = 0; y < 3; y++) {
-        drawLine(color,3,y,0,3-y);
+      for (int y = 0; y < 23; y++) {
+        drawLine(color,brightness(8),23,y,0,23-y);
         flushBuffer();
         clearBuffer();
         delay(animationSpeed);
       }
     }
-    //color = nextColor(color);
+    color = nextColor(color);
   }
 }
+
+//void 

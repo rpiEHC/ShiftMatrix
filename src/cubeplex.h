@@ -180,21 +180,41 @@ int roundClostest(int numerator, int denominator) {
  //////////////////////////////////// DRAWING /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-#define B 0
-#define G 1
-#define R 2
-#define T 3
-#define Y 4
-#define P 5
+
+// #define B 0
+// #define G 1
+// #define R 2
+// #define T 3
+// #define Y 4
+// #define P 5
+// #define W 6
+// #define O 7
+
+// #define blue 0
+// #define green 1
+// #define red 2
+// #define teal 3
+// #define yellow 4
+// #define purple 5
+// #define white 6
+// #define off -7
+
+
+#define R 0
+#define B 1
+#define G 2
+#define P 3
+#define T 4
+#define Y 5
 #define W 6
 #define O 7
 
-#define blue 0
-#define green 1
-#define red 2
-#define teal 3
-#define yellow 4
-#define purple 5
+#define red 0
+#define blue 1
+#define green 2
+#define purple 3
+#define teal 4
+#define yellow 5
 #define white 6
 #define off -7
 
@@ -318,9 +338,9 @@ ISR(TIMER2_OVF_vect) {
   for (int i = 0; i < MATRIX_WIDTH; i++) {
     // set RED BLUE and GREEN
     PORTD &= ~0x3C;
-    PORTD |= (_display_buffer[i+currentRow*rowSize+0*displaySize]&oncontext)!=0?0x10:0x00; // RED
-    PORTD |= (_display_buffer[i+currentRow*rowSize+1*displaySize]&oncontext)!=0?0x04:0x00; // BLUE
-    PORTD |= (_display_buffer[i+currentRow*rowSize+2*displaySize]&oncontext)!=0?0x08:0x00; // GREEN
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext)!=0?0x10:0x00; // RED
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(  displaySize)]&oncontext)!=0?0x04:0x00; // BLUE
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(2*displaySize)]&oncontext)!=0?0x08:0x00; // GREEN
     // shift the common row
     PORTD |= i==currentRow?0x20:0x00; // COMMON
     // CLOCK PULSE
@@ -332,7 +352,8 @@ ISR(TIMER2_OVF_vect) {
   //delayMicroseconds(10);
   //digitalWrite(REGESTER_CLOCK, LOW);
   PORTB &= ~0x02;
-  currentRow = (currentRow+1)%MATRIX_HEIGHT;
+  if (currentRow == MATRIX_HEIGHT) currentRow = 0;
+  else currentRow = (currentRow+1);
 }
 
 
