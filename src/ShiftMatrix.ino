@@ -32,8 +32,6 @@ void kevinTest() {
 }
 
 void lineTest() {
-  //drawLed(blue,brightness(8),0,0);
-  //drawLed(green,brightness(8),23,23);
   drawLine(white, brightness(8), 0,21, 23, 21);
   flushBuffer();
   clearBuffer();
