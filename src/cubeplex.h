@@ -223,7 +223,7 @@ int roundClostest(int numerator, int denominator) {
 | color this function turns on different colors of the LED                     |
 \******************************************************************************/
 void drawLed(int color, int brightness, int x, int y) {
-  
+  if (x > MATRIX_WIDTH || x < 0 || y > MATRIX_HEIGHT || y < 0) return;
   if ((color/3)==0) { // single color (red green blue)
     _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] += brightness;
   }
@@ -245,6 +245,12 @@ void drawLed(int color, int brightness, int x, int y) {
 void drawLed(int color, int x, int y) {
   drawLed(color,FULL,x,y);
 }
+
+
+#include "drawLetter.h"
+
+
+
 
 /********************************** DRAW BOX **********************************\
 | This function will draw a filled in box of the specified color on the cube   |
