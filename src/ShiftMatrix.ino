@@ -5,6 +5,7 @@ void setup () {
   initDisplay();
   pinMode(13,OUTPUT);
   digitalWrite(13,LOW);
+  //digitalWrite(13,HIGH);
   //drawLed(red,FULL,0,0);
   //flushBuffer();
 }
@@ -12,6 +13,7 @@ void loop() {
   //digitalWrite()
   //trifade();
   planarSpin();
+  circleTest();
   //chaseTheDot();
   //everyColor();
   //whitefull();
@@ -21,6 +23,29 @@ void loop() {
 
 int color = 6;
 
+void circleTest() {
+  int maxSize = 12;
+  int centerx = 12;
+  int centery = 12;
+  for (int i = 0; i < maxSize; i++) {
+    drawCircle(blue,   brightness(8), 12, 12, i);
+    drawCircle(blue,   brightness(8), 12, 12, (i+1)%maxSize);
+    drawCircle(green,  brightness(8), 12, 12, (i+2)%maxSize);
+    drawCircle(green,  brightness(8), 12, 12, (i+3)%maxSize);
+    drawCircle(red,    brightness(8), 12, 12, (i+4)%maxSize);
+    drawCircle(red,    brightness(8), 12, 12, (i+5)%maxSize);
+    drawCircle(teal,   brightness(8), 12, 12, (i+6)%maxSize);
+    drawCircle(teal,   brightness(8), 12, 12, (i+7)%maxSize);
+    drawCircle(yellow, brightness(8), 12, 12, (i+8)%maxSize);
+    drawCircle(yellow, brightness(8), 12, 12, (i+9)%maxSize);
+    drawCircle(purple, brightness(8), 12, 12, (i+10)%maxSize);
+    drawCircle(purple, brightness(8), 12, 12, (i+11)%maxSize);
+
+    flushBuffer();
+    clearBuffer();
+    delay(100);
+  }
+}
 
 void kevinTest() {
   for (int i = 0; i < 24; i++) {

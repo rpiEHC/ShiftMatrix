@@ -317,7 +317,7 @@ void drawLine(int color, int startx, int starty, int endx, int endy) {
 
 /*
 */
-void draw(int color, int brightness, int x0, int y0, int radius)
+void drawCircle(int color, int brightness, int x0, int y0, int radius)
 {
   int f = 1 - radius;
   int ddF_x = 1;
@@ -325,10 +325,11 @@ void draw(int color, int brightness, int x0, int y0, int radius)
   int x = 0;
   int y = radius;
  
-  setPixel(x0, y0 + radius);
-  setPixel(x0, y0 - radius);
-  setPixel(x0 + radius, y0);
-  setPixel(x0 - radius, y0);
+
+  drawLed(color,brightness,x0, y0 + radius);
+  drawLed(color,brightness,x0, y0 - radius);
+  drawLed(color,brightness,x0 + radius, y0);
+  drawLed(color,brightness,x0 - radius, y0);
  
   while(x < y)
   {
@@ -344,14 +345,14 @@ void draw(int color, int brightness, int x0, int y0, int radius)
     x++;
     ddF_x += 2;
     f += ddF_x;    
-    setPixel(x0 + x, y0 + y);
-    setPixel(x0 - x, y0 + y);
-    setPixel(x0 + x, y0 - y);
-    setPixel(x0 - x, y0 - y);
-    setPixel(x0 + y, y0 + x);
-    setPixel(x0 - y, y0 + x);
-    setPixel(x0 + y, y0 - x);
-    setPixel(x0 - y, y0 - x);
+    drawLed(color,brightness,x0 + x, y0 + y);
+    drawLed(color,brightness,x0 - x, y0 + y);
+    drawLed(color,brightness,x0 + x, y0 - y);
+    drawLed(color,brightness,x0 - x, y0 - y);
+    drawLed(color,brightness,x0 + y, y0 + x);
+    drawLed(color,brightness,x0 - y, y0 + x);
+    drawLed(color,brightness,x0 + y, y0 - x);
+    drawLed(color,brightness,x0 - y, y0 - x);
   }
 }
   //////////////////////////////////////////////////////////////////////////////
@@ -411,7 +412,7 @@ ISR(TIMER2_OVF_vect) {
 |  16000000 / (1024*256) = 16000000 / 262144 =    ~61 Hz                       |
 \******************************************************************************/
 int animationTimer = 0;
-int animationMax = 0;
+int animationMax = 10;
 
 ISR(TIMER1_OVF_vect) {
   animationTimer++;
