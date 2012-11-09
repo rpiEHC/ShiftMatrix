@@ -382,7 +382,8 @@ void flushBuffer() {
 int currentRow = 0;
 ISR(TIMER2_OVF_vect) {
   //digitalWrite(13,HIGH);
-  for (int i = 0; i < MATRIX_WIDTH; i++) {
+  //for (int i = 0; i < MATRIX_WIDTH; i++) {
+    for (int i = MATRIX_WIDTH-1; i >= 0; i--){
     // set RED BLUE and GREEN
     PORTD &= ~0x3C;
     PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext)!=0?0x10:0x00; // RED
