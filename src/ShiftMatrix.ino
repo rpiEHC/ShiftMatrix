@@ -12,6 +12,7 @@ void setup () {
 void loop() {
   //digitalWrite()
   //trifade();
+  marqueueText("1234567");
   letterTest();
   circleTest();
   planarSpin();
@@ -46,6 +47,36 @@ void letterTest() {
       drawLetter(white, brightness(8), 12-i, 16, letter+10);
       drawLetter(white, brightness(8), 18-i, 16, letter+11);
       drawLetter(white, brightness(8), 24-i, 16, letter+12);
+
+      flushBuffer();
+      clearBuffer();
+      delay(100);
+    }
+    letter++;
+  }
+}
+
+void marqueueText(char* text) {
+  int letter = 0;
+  while(text[letter] != 0) {
+    for (int i = 0; i < 6; i++) {
+      // drawLetter(white, brightness(8), 0-i, 0, letter);
+      // drawLetter(white, brightness(8), 6-i, 0, letter+1);
+      // drawLetter(white, brightness(8), 12-i, 0, letter+2);
+      // drawLetter(white, brightness(8), 18-i, 0, letter+3);
+      // drawLetter(white, brightness(8), 24-i, 0, letter+4);
+
+      drawLetter(white, brightness(8), 0-i,  8, text[letter]);
+      drawLetter(white, brightness(8), 6-i,  8, text[letter+1]);
+      drawLetter(white, brightness(8), 12-i, 8, text[letter+2]);
+      drawLetter(white, brightness(8), 18-i, 8, text[letter+3]);
+      drawLetter(white, brightness(8), 24-i, 8, text[letter+4]);
+
+      // drawLetter(white, brightness(8), 0-i,  16, letter+8);
+      // drawLetter(white, brightness(8), 6-i,  16, letter+9);
+      // drawLetter(white, brightness(8), 12-i, 16, letter+10);
+      // drawLetter(white, brightness(8), 18-i, 16, letter+11);
+      // drawLetter(white, brightness(8), 24-i, 16, letter+12);
 
       flushBuffer();
       clearBuffer();

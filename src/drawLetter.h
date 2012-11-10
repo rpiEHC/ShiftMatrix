@@ -8,13 +8,13 @@ void drawLetter(int color, int brightness, int startx, int starty, char letter) 
 		}
 	}
 
-	char* letterLine0 = "#####";
-	char* letterLine1 = "#####";
-	char* letterLine2 = "#####";
-	char* letterLine3 = "#####";
-	char* letterLine4 = "#####";
-	char* letterLine5 = "#####";
-	char* letterLine6 = "#####";
+	char* letterLine0 = "     ";
+	char* letterLine1 = "     ";
+	char* letterLine2 = "     ";
+	char* letterLine3 = "     ";
+	char* letterLine4 = "     ";
+	char* letterLine5 = "     ";
+	char* letterLine6 = "     ";
 
 	if (letter == 'a' || letter == 'A') {
 		letterLine0 = "  #  ";
@@ -317,11 +317,11 @@ void drawLetter(int color, int brightness, int startx, int starty, char letter) 
 	else if (letter == '7') {
 		letterLine0 = "#####";
 		letterLine1 = "    #";
-		letterLine2 = "    #";
-		letterLine3 = "    #";
-		letterLine4 = "    #";
-		letterLine5 = "    #";
-		letterLine6 = "    #";
+		letterLine2 = "   # ";
+		letterLine3 = "  # ";
+		letterLine4 = "  #  ";
+		letterLine5 = "  #  ";
+		letterLine6 = "  #  ";
 	}
 	else if (letter == '8') {
 		letterLine0 = " ### ";
@@ -376,6 +376,15 @@ void drawLetter(int color, int brightness, int startx, int starty, char letter) 
 		letterLine4 = "  #  ";
 		letterLine5 = "     ";
 		letterLine6 = "  #  ";
+	}
+	else if (letter == ' ') {
+		letterLine0 = "     ";
+		letterLine1 = "     ";
+		letterLine2 = "     ";
+		letterLine3 = "     ";
+		letterLine4 = "     ";
+		letterLine5 = "     ";
+		letterLine6 = "     ";
 	}
 
 	char* letterBytes[7];
