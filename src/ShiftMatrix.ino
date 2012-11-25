@@ -12,7 +12,9 @@ void setup () {
 void loop() {
   //digitalWrite()
   //trifade();
-  marqueueText("Welcome to the Lightting research center!");
+  marqueueText("Welcome to the");
+  marqueueText("Smart Lighting ERC!");
+  animationTimer = 0;
   //marqueueText("Welcome to the Lightting research center!");
   //marqueueText("Welcome to the Lightting research center!");
   //letterTest();
@@ -77,7 +79,7 @@ void marqueueText(char* text) {
   letter = 0;
   text = newText;
   while(text[letter] != 0) {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
       // drawLetter(white, brightness(8), 0-i, 0, letter);
       // drawLetter(white, brightness(8), 6-i, 0, letter+1);
       // drawLetter(white, brightness(8), 12-i, 0, letter+2);
@@ -85,10 +87,10 @@ void marqueueText(char* text) {
       // drawLetter(white, brightness(8), 24-i, 0, letter+4);
 
       drawLetter(white, brightness(8), 0-i,  8, text[letter]);
-      drawLetter(white, brightness(8), 6-i,  8, text[letter+1]);
-      drawLetter(white, brightness(8), 12-i, 8, text[letter+2]);
-      drawLetter(white, brightness(8), 18-i, 8, text[letter+3]);
-      drawLetter(white, brightness(8), 24-i, 8, text[letter+4]);
+      drawLetter(white, brightness(8), 5-i+2,  8, text[letter+1]);
+      drawLetter(white, brightness(8), 10-i+4, 8, text[letter+2]);
+      drawLetter(white, brightness(8), 15-i+6, 8, text[letter+3]);
+      drawLetter(white, brightness(8), 20-i+8, 8, text[letter+4]);
 
       // drawLetter(white, brightness(8), 0-i,  16, letter+8);
       // drawLetter(white, brightness(8), 6-i,  16, letter+9);
