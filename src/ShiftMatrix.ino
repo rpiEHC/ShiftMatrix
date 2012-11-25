@@ -12,8 +12,10 @@ void setup () {
 void loop() {
   //digitalWrite()
   //trifade();
-  marqueueText("1234567");
-  letterTest();
+  marqueueText("Welcome to the Lightting research center!");
+  //marqueueText("Welcome to the Lightting research center!");
+  //marqueueText("Welcome to the Lightting research center!");
+  //letterTest();
   circleTest();
   planarSpin();
   
@@ -58,6 +60,22 @@ void letterTest() {
 
 void marqueueText(char* text) {
   int letter = 0;
+  int length = 0;
+  while(text[length] != 0) length++;
+
+  char* newText = (char*)malloc(sizeof(char)*(length+4));
+  
+  newText[0] = ' ';
+  newText[1] = ' ';
+  newText[2] = ' ';
+  newText[3] = ' ';
+  while(text[letter] != 0){
+    newText[letter+4] = text[letter];
+    letter++;
+  }
+
+  letter = 0;
+  text = newText;
   while(text[letter] != 0) {
     for (int i = 0; i < 6; i++) {
       // drawLetter(white, brightness(8), 0-i, 0, letter);
@@ -80,10 +98,11 @@ void marqueueText(char* text) {
 
       flushBuffer();
       clearBuffer();
-      delay(100);
+      delay(50);
     }
     letter++;
   }
+  free(newText);
 }
 
 void circleTest() {
