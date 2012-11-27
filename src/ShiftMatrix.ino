@@ -22,6 +22,8 @@ void loop() {
   //marqueueText("Welcome to the Lightting research center!");
   //letterTest();
   //testDraw();
+  //shiftingSquares();
+  raindrops();
   circleTest();
   //planarSpin();
   
@@ -120,7 +122,7 @@ void circleTest() {
   continuePattern = true;
   int animationSpeed = 100;
   while (continuePattern) {
-    for (int i = 0; i < maxSize; i++) {
+    for (int i = 0; i < maxSize-2; i++) {
       drawCircle(blue,   brightness(8), 12, 12, i);
       drawCircle(blue,   brightness(8), 12, 12, (i+1)%maxSize);
       drawCircle(green,  brightness(8), 12, 12, (i+2)%maxSize);
@@ -133,12 +135,198 @@ void circleTest() {
       drawCircle(yellow, brightness(8), 12, 12, (i+9)%maxSize);
       drawCircle(purple, brightness(8), 12, 12, (i+10)%maxSize);
       drawCircle(purple, brightness(8), 12, 12, (i+11)%maxSize);
+      drawCircle(white,  brightness(8), 12, 12, (i+12)%maxSize);
+      drawCircle(white,  brightness(8), 12, 12, (i+13)%maxSize);
 
       flushBuffer();
       clearBuffer();
       delay(animationSpeed);
       //while(true);
     }
+  }
+}
+
+void shiftingSquares() {
+  int numberOfSquares = 3;
+  int squareXValues[numberOfSquares];
+  for (int i = 0; i < numberOfSquares; i++) {
+    squareXValues[i] = random(0,6);
+  }
+  int squareYValues[numberOfSquares];
+  for (int i = 0; i < numberOfSquares; i++) {
+    squareYValues[i] = random(0,6);
+  }
+
+  int animationSpeed = 50;
+  continuePattern = true;
+  while (continuePattern) {
+    // Pick a square to move
+    int randomSquare = random(0,numberOfSquares);
+    // Pick a direction to move it in
+    int randomDirection = random(0,4);
+    int xmod = 0;
+    int ymod = 0;
+    int xShift = 0;
+    int yShift = 0;
+
+    int boxsize = 3;
+
+    switch (randomDirection){
+      case 0:
+        if (squareXValues[randomSquare] < 5) xmod = 1;
+        else xmod = -1;
+        break;
+
+      case 1:
+        if (squareXValues[randomSquare] > 0) xmod = -1;
+        else xmod = 1;
+        break;
+
+      case 2:
+        if (squareYValues[randomSquare] < 5) ymod = 1;
+        else ymod = -1;
+        break;
+
+      case 3:
+        if (squareYValues[randomSquare] > 0) ymod = -1;
+        else ymod = 1;
+        break;
+    }
+
+
+    while (yShift <= 4 && xShift <= 4 && yShift >= -4 && xShift >= -4) {
+      //draw the squares
+      for (int i = 0; i < numberOfSquares; i++){
+        if (i == randomSquare) {
+          int x = squareXValues[i]*4 + xShift;
+          int y = squareYValues[i]*4 + yShift;
+          drawBox(i, brightness(8),x,y,x+boxsize,y+boxsize);
+          xShift += xmod;
+          yShift += ymod;
+        }
+        else {
+          drawBox(i, brightness(8),squareXValues[i]*4,squareYValues[i]*4,squareXValues[i]*4+3,squareYValues[i]*4+3);
+        }
+      }
+      flushBuffer();
+      clearBuffer();
+      delay(animationSpeed);
+    }
+    squareXValues[randomSquare] += xmod;
+    squareYValues[randomSquare] += ymod;
+  }
+}
+
+/*
+void allShifting() {
+  int numberOfSquares = 3;
+  int squareXValues[numberOfSquares];
+  for (int i = 0; i < numberOfSquares; i++) {
+    squareXValues[i] = random(0,6);
+  }
+  int squareYValues[numberOfSquares];
+  for (int i = 0; i < numberOfSquares; i++) {
+    squareYValues[i] = random(0,6);
+  }
+
+  int animationSpeed = 50;
+  continuePattern = true;
+  while (continuePattern) {
+    // Pick a square to move
+
+    // Pick a direction to move it in
+    int randomDirection = random(0,4);
+    int xmod = 0;
+    int ymod = 0;
+    int xShift = 0;
+    int yShift = 0;
+
+    int boxsize = 3;
+
+    switch (randomDirection){
+      case 0:
+        if (squareXValues[randomSquare] < 5) xmod = 1;
+        else xmod = -1;
+        break;
+
+      case 1:
+        if (squareXValues[randomSquare] > 0) xmod = -1;
+        else xmod = 1;
+        break;
+
+      case 2:
+        if (squareYValues[randomSquare] < 5) ymod = 1;
+        else ymod = -1;
+        break;
+
+      case 3:
+        if (squareYValues[randomSquare] > 0) ymod = -1;
+        else ymod = 1;
+        break;
+    }
+
+
+    while (yShift <= 4 && xShift <= 4 && yShift >= -4 && xShift >= -4) {
+      //draw the squares
+      for (int i = 0; i < numberOfSquares; i++){
+        if (i == randomSquare) {
+          int x = squareXValues[i]*4 + xShift;
+          int y = squareYValues[i]*4 + yShift;
+          drawBox(i, brightness(8),x,y,x+boxsize,y+boxsize);
+          xShift += xmod;
+          yShift += ymod;
+        }
+        else {
+          drawBox(i, brightness(8),squareXValues[i]*4,squareYValues[i]*4,squareXValues[i]*4+3,squareYValues[i]*4+3);
+        }
+      }
+      flushBuffer();
+      clearBuffer();
+      delay(animationSpeed);
+    }
+    squareXValues[randomSquare] += xmod;
+    squareYValues[randomSquare] += ymod;
+  }
+}
+*/
+void raindrops() {
+  continuePattern = true;
+  int animationSpeed = 30;
+  int dropHeight[] = {0,0,0};
+  dropHeight[0] = 0-random(0,8);
+  dropHeight[1] = 0-random(0,8)+8;
+  dropHeight[2] = 0-random(0,8)+16;
+  int dropColumn[] = {0,0,0};
+  dropColumn[0] = random(0,24);
+  dropColumn[1] = random(0,24);
+  dropColumn[2] = random(0,24);
+  while (continuePattern) {
+
+    for (int i = 0; i < 3; i++){
+      if (dropHeight[i] < 24){
+        drawLed(blue, brightness(8), dropHeight[i], dropColumn[i]);
+      }
+      else if (dropHeight[i] == 24) {
+        drawLed(blue, brightness(8), 22, dropColumn[i]+1);
+        drawLed(blue, brightness(8), 22, dropColumn[i]-1);
+      }
+      else if (dropHeight[i] == 25) {
+        drawLed(blue, brightness(8), 22, dropColumn[i]+2);
+        drawLed(blue, brightness(8), 22, dropColumn[i]-2);
+      }
+      else if (dropHeight[i] == 26) {
+        drawLed(blue, brightness(8), 23, dropColumn[i]+3);
+        drawLed(blue, brightness(8), 23, dropColumn[i]-3);
+      }
+      dropHeight[i]++;
+      if (dropHeight[i] == 27) {
+        dropHeight[i] = 0-random(0,8);
+        dropColumn[i] = random(0,24);
+      }
+    }
+    flushBuffer();
+    clearBuffer();
+    delay(animationSpeed);
   }
 }
 
