@@ -10,6 +10,7 @@ void setup () {
   //flushBuffer();
 }
 void loop() {
+  //whitefull();
   //digitalWrite()
   //trifade();
   marqueueText("Welcome to the");
@@ -23,7 +24,7 @@ void loop() {
   
   //chaseTheDot();
   //everyColor();
-  //whitefull();
+  
   //kevinTest();
   //lineTest();
 }
@@ -190,10 +191,12 @@ void whitefull() {
   // clearBuffer();
   // delay(delayTime);
 
-  drawBox(white,brightness(8),0,0,size,size); 
+  drawBox(green,brightness(8),0,0,size,size); 
+  drawBox(blue,  brightness(8),0,0,0,size);
   flushBuffer();
   clearBuffer();
   delay(delayTime);
+  while(true);
 
   // drawBox(white,brightness(8),0,0,size,size); 
   // flushBuffer();

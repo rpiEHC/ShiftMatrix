@@ -59,8 +59,8 @@
 #define MATRIX_HEIGHT 24
 #define BUFFERSIZE MATRIX_WIDTH * MATRIX_HEIGHT * 3
 
-int rowSize = MATRIX_WIDTH;
-int displaySize = MATRIX_WIDTH * MATRIX_HEIGHT;
+int rowSize = MATRIX_WIDTH/2;
+int displaySize = MATRIX_WIDTH/2 * MATRIX_HEIGHT;
 
 
 #include "Arduino.h"
@@ -78,6 +78,7 @@ bool continuePattern = false;
 
 char brightness(int intBrightness) {
   char trimmedBrightness = intBrightness && 0x0F;
+  trimmedBrightness = 0x0F;
   return offcontext==0x0F?trimmedBrightness:trimmedBrightness<<4;
 }
 
@@ -226,9 +227,13 @@ void drawLed(int color, int brightness, int x, int y) {
   ////////////////
   /////////////
   /////////////// change the brightness int so that it only sets two bytes of the matrix depending on if (x maybe y) is even or odd
+  //y = y/2;
+  int offset = y%2?0xCC:0x33;
+  y=y/2;
+  brightness = brightness & offset;
   ////////////
   ///////////////
-  if (x >= MATRIX_WIDTH || x < 0 || y >= MATRIX_HEIGHT || y < 0) return;
+  if (x >= MATRIX_HEIGHT || x < 0 || y >= MATRIX_WIDTH/2 || y < 0) return;
   if ((color/3)==0) { // single color (red green blue)
     _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] += brightness;
   }
@@ -393,24 +398,25 @@ ISR(TIMER2_OVF_vect) {
 
     // set RED BLUE and GREEN
     PORTD &= ~0x3C;
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext&0xCC)!=0?0x10:0x00; // RED
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(  displaySize)]&oncontext&0xCC)!=0?0x04:0x00; // BLUE
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(2*displaySize)]&oncontext&0xCC)!=0?0x08:0x00; // GREEN
+    PORTD |= (_display_buffer[i+0+(currentRow*rowSize)                ]&oncontext&0xCC)!=0?0x10:0x00; // RED
+    PORTD |= (_display_buffer[i+0+(currentRow*rowSize)+(  displaySize)]&oncontext&0xCC)!=0?0x04:0x00; // BLUE
+    PORTD |= (_display_buffer[i+0+(currentRow*rowSize)+(2*displaySize)]&oncontext&0xCC)!=0?0x08:0x00; // GREEN
     // shift the common row
-    PORTD |= i==currentRow?0x20:0x00; // COMMON
+    PORTD |= i*2+1==currentRow?0x20:0x00; // COMMON
     // CLOCK PULSE
     PORTB |= 0x01;
     PORTB &= ~0x01;
 
-
+    //i--;
     // Grab the second half of the data
     // set RED BLUE and GREEN
     PORTD &= ~0x3C;
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext&0x33)!=0?0x10:0x00; // RED
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(  displaySize)]&oncontext&0x33)!=0?0x04:0x00; // BLUE
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(2*displaySize)]&oncontext&0x33)!=0?0x08:0x00; // GREEN
+    PORTD |= (_display_buffer[i+0+(currentRow*rowSize)                ]&oncontext&0x33)!=0?0x10:0x00; // RED
+    PORTD |= (_display_buffer[i+0+(currentRow*rowSize)+(  displaySize)]&oncontext&0x33)!=0?0x04:0x00; // BLUE
+    PORTD |= (_display_buffer[i+0+(currentRow*rowSize)+(2*displaySize)]&oncontext&0x33)!=0?0x08:0x00; // GREEN
     // shift the common row
-    PORTD |= i==currentRow?0x20:0x00; // COMMON
+
+    PORTD |= i*2==currentRow?0x20:0x00; // COMMON
     // CLOCK PULSE
     PORTB |= 0x01;
     PORTB &= ~0x01;
