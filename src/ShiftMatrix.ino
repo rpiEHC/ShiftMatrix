@@ -13,23 +13,28 @@ void loop() {
   //whitefull();
   //digitalWrite()
   //trifade();
-  marqueueText("Welcome to the");
-  marqueueText("Smart Lighting ERC!");
-  animationTimer = 0;
+  
+  //marqueueText("Welcome to the");
+  //marqueueText("Smart Lighting ERC!");
+  //animationTimer = 0;
+
   //marqueueText("Welcome to the Lightting research center!");
   //marqueueText("Welcome to the Lightting research center!");
   //letterTest();
+  //testDraw();
   circleTest();
-  planarSpin();
+  //planarSpin();
   
   //chaseTheDot();
   //everyColor();
   
   //kevinTest();
   //lineTest();
+  //checkerboard();
 }
 
 int color = 6;
+
 
 void letterTest() {
   char letter = '0';
@@ -132,8 +137,56 @@ void circleTest() {
       flushBuffer();
       clearBuffer();
       delay(animationSpeed);
+      //while(true);
     }
   }
+}
+
+void testDraw() {
+  color = blue;
+  int bright = brightness(8);
+  int x0 = 12;
+  int y0 = 12;
+  int radius = 0;
+
+  int f = 1 - radius;
+  int ddF_x = 1;
+  int ddF_y = -2 * radius;
+  int x = 0;
+  int y = radius;
+ 
+
+  drawLed(color,bright,x0, y0 + radius);
+  drawLed(color,bright,x0, y0 - radius);
+  /*drawLed(color,bright,x0 + radius, y0);
+  drawLed(color,bright,x0 - radius, y0);
+ 
+  while(x < y)
+  {
+    // ddF_x == 2 * x + 1;
+    // ddF_y == -2 * y;
+    // f == x*x + y*y - radius*radius + 2*x - y + 1;
+    if(f >= 0) 
+    {
+      y--;
+      ddF_y += 2;
+      f += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f += ddF_x;    
+    drawLed(color,bright,x0 + x, y0 + y);
+    drawLed(color,bright,x0 - x, y0 + y);
+    drawLed(color,bright,x0 + x, y0 - y);
+    drawLed(color,bright,x0 - x, y0 - y);
+    drawLed(color,bright,x0 + y, y0 + x);
+    drawLed(color,bright,x0 - y, y0 + x);
+    drawLed(color,bright,x0 + y, y0 - x);
+    drawLed(color,bright,x0 - y, y0 - x);
+  }*/
+  //drawLed(blue, brightness(8),12,12);
+  flushBuffer();
+  clearBuffer();
 }
 
 void clock() {
@@ -146,6 +199,16 @@ void clock() {
   }
 }
 
+void checkerboard() {
+  for (int i = 0; i < 24; i ++) {
+    for (int j = i%2^1; j < 24; j+= 2) {
+      drawLed(white, brightness(8), i,j);
+    }
+  }
+  flushBuffer();
+  clearBuffer();  
+}
+
 void kevinTest() {
   for (int i = 0; i < 24; i++) {
     drawLed(yellow, brightness(8), 0, i);
@@ -156,9 +219,12 @@ void kevinTest() {
 }
 
 void lineTest() {
-  drawLine(white, brightness(8), 0,21, 23, 21);
-  flushBuffer();
-  clearBuffer();
+  for (int i = 0; i < 24; i++) {
+    drawLine(white, brightness(8), 0,i, 23, i);
+    flushBuffer();
+    clearBuffer();
+    delay(100);
+  }
 
 }
 
@@ -191,7 +257,7 @@ void whitefull() {
   // clearBuffer();
   // delay(delayTime);
 
-  drawBox(green,brightness(8),0,0,size,size); 
+  drawBox(white,brightness(8),0,0,size,size); 
   drawBox(blue,  brightness(8),0,0,0,size);
   flushBuffer();
   clearBuffer();

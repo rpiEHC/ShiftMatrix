@@ -235,16 +235,23 @@ void drawLed(int color, int brightness, int x, int y) {
   if (x >= MATRIX_HEIGHT || x < 0 || y >= MATRIX_WIDTH || y < 0) return;
   y=y/2;
   if ((color/3)==0) { // single color (red green blue)
+    _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] &= ~(offcontext & offset);
     _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] += brightness;
   }
   else if ((color/3)==1) { // double color (teal yellow purple)
+    _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] &= ~(offcontext & offset);
     _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] += brightness;
+    _display_buffer[(((color+1)%3)*displaySize)+(x*rowSize)+y] &= ~(offcontext & offset);
     _display_buffer[(((color+1)%3)*displaySize)+(x*rowSize)+y] += brightness;
   }
   else if (color == 6){ // all colors (white)
+    _display_buffer[((0)*displaySize)+(x*rowSize)+y] &= ~(offcontext & offset);
     _display_buffer[((0)*displaySize)+(x*rowSize)+y] += brightness;
+    _display_buffer[((1)*displaySize)+(x*rowSize)+y] &= ~(offcontext & offset);
     _display_buffer[((1)*displaySize)+(x*rowSize)+y] += brightness;
+    _display_buffer[((2)*displaySize)+(x*rowSize)+y] &= ~(offcontext & offset);
     _display_buffer[((2)*displaySize)+(x*rowSize)+y] += brightness;
+    
   }
   else if (color == -7) {
     _display_buffer[((0)*displaySize)+(x*rowSize)+y] = 0;
