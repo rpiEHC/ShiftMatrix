@@ -223,6 +223,11 @@ int roundClostest(int numerator, int denominator) {
 | color this function turns on different colors of the LED                     |
 \******************************************************************************/
 void drawLed(int color, int brightness, int x, int y) {
+  ////////////////
+  /////////////
+  /////////////// change the brightness int so that it only sets two bytes of the matrix depending on if (x maybe y) is even or odd
+  ////////////
+  ///////////////
   if (x >= MATRIX_WIDTH || x < 0 || y >= MATRIX_HEIGHT || y < 0) return;
   if ((color/3)==0) { // single color (red green blue)
     _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] += brightness;
@@ -383,17 +388,33 @@ int currentRow = 0;
 ISR(TIMER2_OVF_vect) {
   //digitalWrite(13,HIGH);
   //for (int i = 0; i < MATRIX_WIDTH; i++) {
-    for (int i = MATRIX_WIDTH-1; i >= 0; i--){
+  for (int i = MATRIX_WIDTH/2-1; i >= 0; i--){
+    // Grab the first half of the data
+
     // set RED BLUE and GREEN
     PORTD &= ~0x3C;
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext)!=0?0x10:0x00; // RED
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(  displaySize)]&oncontext)!=0?0x04:0x00; // BLUE
-    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(2*displaySize)]&oncontext)!=0?0x08:0x00; // GREEN
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext&0xCC)!=0?0x10:0x00; // RED
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(  displaySize)]&oncontext&0xCC)!=0?0x04:0x00; // BLUE
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(2*displaySize)]&oncontext&0xCC)!=0?0x08:0x00; // GREEN
     // shift the common row
     PORTD |= i==currentRow?0x20:0x00; // COMMON
     // CLOCK PULSE
     PORTB |= 0x01;
     PORTB &= ~0x01;
+
+
+    // Grab the second half of the data
+    // set RED BLUE and GREEN
+    PORTD &= ~0x3C;
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)                ]&oncontext&0x33)!=0?0x10:0x00; // RED
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(  displaySize)]&oncontext&0x33)!=0?0x04:0x00; // BLUE
+    PORTD |= (_display_buffer[i+(currentRow*rowSize)+(2*displaySize)]&oncontext&0x33)!=0?0x08:0x00; // GREEN
+    // shift the common row
+    PORTD |= i==currentRow?0x20:0x00; // COMMON
+    // CLOCK PULSE
+    PORTB |= 0x01;
+    PORTB &= ~0x01;
+
   }
   //digitalWrite(REGESTER_CLOCK, HIGH);
   PORTB |= 0x02;
