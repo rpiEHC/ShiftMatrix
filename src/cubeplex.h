@@ -57,7 +57,7 @@
 // Define the size of the LED matrix
 #define MATRIX_WIDTH 24
 #define MATRIX_HEIGHT 24
-#define BUFFERSIZE MATRIX_WIDTH * MATRIX_HEIGHT * 3
+#define BUFFERSIZE MATRIX_WIDTH/2 * MATRIX_HEIGHT * 3
 
 int rowSize = MATRIX_WIDTH/2;
 int displaySize = MATRIX_WIDTH/2 * MATRIX_HEIGHT;
@@ -229,11 +229,11 @@ void drawLed(int color, int brightness, int x, int y) {
   /////////////// change the brightness int so that it only sets two bytes of the matrix depending on if (x maybe y) is even or odd
   //y = y/2;
   int offset = y%2?0xCC:0x33;
-  y=y/2;
   brightness = brightness & offset;
   ////////////
   ///////////////
-  if (x >= MATRIX_HEIGHT || x < 0 || y >= MATRIX_WIDTH/2 || y < 0) return;
+  if (x >= MATRIX_HEIGHT || x < 0 || y >= MATRIX_WIDTH || y < 0) return;
+  y=y/2;
   if ((color/3)==0) { // single color (red green blue)
     _display_buffer[(((color)%3)*displaySize)+(x*rowSize)+y] += brightness;
   }
