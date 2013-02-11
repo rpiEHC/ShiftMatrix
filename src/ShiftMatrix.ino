@@ -8,64 +8,16 @@ void setup () {
   //digitalWrite(13,HIGH);
   //drawLed(red,FULL,0,0);
   //flushBuffer();
+  animationMax = 60;
 }
-void loop() {
-  //whitefull();
-  //digitalWrite()
-  //trifade();
-  
-  //marqueueText("Welcome to the");
-  //marqueueText("Smart Lighting ERC!");
-  //animationTimer = 0;
-
-  //marqueueText("Welcome to the Lightting research center!");
-  //marqueueText("Welcome to the Lightting research center!");
-  //letterTest();
-  //testDraw();
-  //shiftingSquares();
+void loop() {    
+  shiftingSquares();
   raindrops();
   circleTest();
-  //planarSpin();
-  
-  //chaseTheDot();
-  //everyColor();
-  
-  //kevinTest();
-  //lineTest();
-  //checkerboard();
-}
-
-int color = 6;
-
-
-void letterTest() {
-  char letter = '0';
-  while(true) {
-    for (int i = 0; i < 6; i++) {
-      drawLetter(white, brightness(8), 0-i, 0, letter);
-      drawLetter(white, brightness(8), 6-i, 0, letter+1);
-      drawLetter(white, brightness(8), 12-i, 0, letter+2);
-      drawLetter(white, brightness(8), 18-i, 0, letter+3);
-      drawLetter(white, brightness(8), 24-i, 0, letter+4);
-
-      drawLetter(white, brightness(8), 0-i,  8, letter+4);
-      drawLetter(white, brightness(8), 6-i,  8, letter+5);
-      drawLetter(white, brightness(8), 12-i, 8, letter+6);
-      drawLetter(white, brightness(8), 18-i, 8, letter+7);
-      drawLetter(white, brightness(8), 24-i, 8, letter+8);
-
-      drawLetter(white, brightness(8), 0-i,  16, letter+8);
-      drawLetter(white, brightness(8), 6-i,  16, letter+9);
-      drawLetter(white, brightness(8), 12-i, 16, letter+10);
-      drawLetter(white, brightness(8), 18-i, 16, letter+11);
-      drawLetter(white, brightness(8), 24-i, 16, letter+12);
-
-      flushBuffer();
-      clearBuffer();
-      delay(100);
-    }
-    letter++;
-  }
+  planarSpin();
+  bars();
+  ripples();
+  marqueueText("Welcome to the Smart Lighting Engeneering Research Center");
 }
 
 void marqueueText(char* text) {
@@ -115,6 +67,111 @@ void marqueueText(char* text) {
   free(newText);
 }
 
+//ripples----------------------------------------------------------------------------------
+void ripples(){
+  continuePattern = true;
+  int animationSpeed = 100;
+  //               r b g p t y
+  int color0[6] = {0,1,2,3,4,5};
+  int color1[6] = {3,4,5,1,2,0};
+  int color2[6] = {5,3,4,0,1,2};
+  int color = random(0,5);
+  int posx[3];
+  int posy[3];
+  int siz[3] = {0,0,0};
+  for(int i=0; i<3; i++){
+      posx[i] = random(4,20);
+      posy[i] = random(4,20);
+  }
+  for(siz[0]; siz[0]<9; siz[0]++){
+    drawCircle(color0[color],brightness(8),posx[0],posy[0],siz[0]);
+    drawCircle(color0[color],brightness(8),posx[0],posy[0],siz[0]-1);
+    flushBuffer();
+    clearBuffer();
+    delay(animationSpeed);
+  }
+  for(siz[0]; siz[0]<18; siz[0]++){
+    drawCircle(color0[color],brightness(8),posx[0],posy[0],siz[0]);
+    drawCircle(color0[color],brightness(8),posx[0],posy[0],siz[0]-1);
+    drawCircle(color1[color],brightness(8),posx[1],posy[1],siz[1]);
+    drawCircle(color1[color],brightness(8),posx[1],posy[1],siz[1]-1);
+    siz[1]++;
+    flushBuffer();
+    clearBuffer();
+    delay(animationSpeed);
+  }    
+  while(continuePattern){    
+    drawCircle(color0[color],brightness(8),posx[0],posy[0],siz[0]);
+    drawCircle(color0[color],brightness(8),posx[0],posy[0],siz[0]-1);
+    drawCircle(color1[color],brightness(8),posx[1],posy[1],siz[1]);
+    drawCircle(color1[color],brightness(8),posx[1],posy[1],siz[1]-1);
+    drawCircle(color2[color],brightness(8),posx[2],posy[2],siz[2]);
+    drawCircle(color2[color],brightness(8),posx[2],posy[2],siz[2]-1);
+    
+    siz[0]++;
+    siz[1]++;
+    siz[2]++;
+    
+    for(int i=0; i<3; i++){
+      if(siz[i] > 26){
+        siz[i] = 1;
+        posx[i] = random(4,20);
+        posy[i] = random(4,20);
+      }
+    }
+    
+    flushBuffer();
+    clearBuffer();
+    delay(animationSpeed);
+    
+  }
+}
+  
+
+//filling bars------------------------------------------------------------------------------
+void bars(){
+  continuePattern = true;
+  int animationSpeed = 30;
+  while(continuePattern){
+    int dir = random(0,6);
+    char sizes[8] = {1,2,3,4,6,8};
+    int bars = sizes[random(0,5)];
+    int colors[bars];
+    for(int i=0; i<bars; i++){
+      colors[i] = random(0,6);
+    }
+    for(int j=0; j<bars; j++){
+      for(int i=0; i<24; i++){
+        switch(dir){
+          case 0://left to right
+            drawLine(colors[j], brightness(8),24/bars*j,i,24/bars*(j+1)-1,i);
+            break;
+          case 1://right to left
+            drawLine(colors[j], brightness(8),24/bars*j,23-i,24/bars*(j+1)-1,23-i);
+            break;
+          case 2://top to bottom
+            drawLine(colors[j], brightness(8),i,24/bars*j,i,24/bars*(j+1)-1);
+            break;
+          case 3://bottom to top
+            drawLine(colors[j], brightness(8),23-i,24/bars*j,23-i,24/bars*(j+1)-1);
+            break;
+          default://both
+            drawLine(colors[j], brightness(8),24/bars*j,i,24/bars*(j+1)-1,i);
+            drawLine(colors[j], brightness(8),i,24/bars*j,i,24/bars*(j+1)-1);
+            break;
+        }
+        flushBuffer();
+        delay(animationSpeed);
+      }
+    }
+    for(int i=0; i<24; i++){
+      delay(animationSpeed);
+    }
+    clearBuffer();
+  }
+}
+
+//Concentric Circles-------------------------------------------------------------------------
 void circleTest() {
   int maxSize = 16;
   int centerx = 12;
@@ -122,17 +179,17 @@ void circleTest() {
   continuePattern = true;
   int animationSpeed = 100;
   while (continuePattern) {
-    for (int i = 0; i < maxSize-2; i++) {
+    for (int i = 0; i < maxSize; i++) {
       drawCircle(blue,   brightness(8), 12, 12, i);
       drawCircle(blue,   brightness(8), 12, 12, (i+1)%maxSize);
-      drawCircle(green,  brightness(8), 12, 12, (i+2)%maxSize);
-      drawCircle(green,  brightness(8), 12, 12, (i+3)%maxSize);
-      drawCircle(red,    brightness(8), 12, 12, (i+4)%maxSize);
-      drawCircle(red,    brightness(8), 12, 12, (i+5)%maxSize);
-      drawCircle(teal,   brightness(8), 12, 12, (i+6)%maxSize);
-      drawCircle(teal,   brightness(8), 12, 12, (i+7)%maxSize);
-      drawCircle(yellow, brightness(8), 12, 12, (i+8)%maxSize);
-      drawCircle(yellow, brightness(8), 12, 12, (i+9)%maxSize);
+      drawCircle(teal,  brightness(8), 12, 12, (i+2)%maxSize);
+      drawCircle(teal,  brightness(8), 12, 12, (i+3)%maxSize);
+      drawCircle(green,    brightness(8), 12, 12, (i+4)%maxSize);
+      drawCircle(green,    brightness(8), 12, 12, (i+5)%maxSize);
+      drawCircle(yellow,   brightness(8), 12, 12, (i+6)%maxSize);
+      drawCircle(yellow,   brightness(8), 12, 12, (i+7)%maxSize);
+      drawCircle(red, brightness(8), 12, 12, (i+8)%maxSize);
+      drawCircle(red, brightness(8), 12, 12, (i+9)%maxSize);
       drawCircle(purple, brightness(8), 12, 12, (i+10)%maxSize);
       drawCircle(purple, brightness(8), 12, 12, (i+11)%maxSize);
       drawCircle(white,  brightness(8), 12, 12, (i+12)%maxSize);
@@ -146,6 +203,7 @@ void circleTest() {
   }
 }
 
+//Shifting Squares-------------------------------------------------------------------
 void shiftingSquares() {
   int numberOfSquares = 3;
   int squareXValues[numberOfSquares];
@@ -217,78 +275,8 @@ void shiftingSquares() {
   }
 }
 
-/*
-void allShifting() {
-  int numberOfSquares = 3;
-  int squareXValues[numberOfSquares];
-  for (int i = 0; i < numberOfSquares; i++) {
-    squareXValues[i] = random(0,6);
-  }
-  int squareYValues[numberOfSquares];
-  for (int i = 0; i < numberOfSquares; i++) {
-    squareYValues[i] = random(0,6);
-  }
 
-  int animationSpeed = 50;
-  continuePattern = true;
-  while (continuePattern) {
-    // Pick a square to move
-
-    // Pick a direction to move it in
-    int randomDirection = random(0,4);
-    int xmod = 0;
-    int ymod = 0;
-    int xShift = 0;
-    int yShift = 0;
-
-    int boxsize = 3;
-
-    switch (randomDirection){
-      case 0:
-        if (squareXValues[randomSquare] < 5) xmod = 1;
-        else xmod = -1;
-        break;
-
-      case 1:
-        if (squareXValues[randomSquare] > 0) xmod = -1;
-        else xmod = 1;
-        break;
-
-      case 2:
-        if (squareYValues[randomSquare] < 5) ymod = 1;
-        else ymod = -1;
-        break;
-
-      case 3:
-        if (squareYValues[randomSquare] > 0) ymod = -1;
-        else ymod = 1;
-        break;
-    }
-
-
-    while (yShift <= 4 && xShift <= 4 && yShift >= -4 && xShift >= -4) {
-      //draw the squares
-      for (int i = 0; i < numberOfSquares; i++){
-        if (i == randomSquare) {
-          int x = squareXValues[i]*4 + xShift;
-          int y = squareYValues[i]*4 + yShift;
-          drawBox(i, brightness(8),x,y,x+boxsize,y+boxsize);
-          xShift += xmod;
-          yShift += ymod;
-        }
-        else {
-          drawBox(i, brightness(8),squareXValues[i]*4,squareYValues[i]*4,squareXValues[i]*4+3,squareYValues[i]*4+3);
-        }
-      }
-      flushBuffer();
-      clearBuffer();
-      delay(animationSpeed);
-    }
-    squareXValues[randomSquare] += xmod;
-    squareYValues[randomSquare] += ymod;
-  }
-}
-*/
+//Raindrops------------------------------------------------------------------
 void raindrops() {
   continuePattern = true;
   int animationSpeed = 30;
@@ -330,238 +318,6 @@ void raindrops() {
   }
 }
 
-void testDraw() {
-  color = blue;
-  int bright = brightness(8);
-  int x0 = 12;
-  int y0 = 12;
-  int radius = 0;
-
-  int f = 1 - radius;
-  int ddF_x = 1;
-  int ddF_y = -2 * radius;
-  int x = 0;
-  int y = radius;
- 
-
-  drawLed(color,bright,x0, y0 + radius);
-  drawLed(color,bright,x0, y0 - radius);
-  /*drawLed(color,bright,x0 + radius, y0);
-  drawLed(color,bright,x0 - radius, y0);
- 
-  while(x < y)
-  {
-    // ddF_x == 2 * x + 1;
-    // ddF_y == -2 * y;
-    // f == x*x + y*y - radius*radius + 2*x - y + 1;
-    if(f >= 0) 
-    {
-      y--;
-      ddF_y += 2;
-      f += ddF_y;
-    }
-    x++;
-    ddF_x += 2;
-    f += ddF_x;    
-    drawLed(color,bright,x0 + x, y0 + y);
-    drawLed(color,bright,x0 - x, y0 + y);
-    drawLed(color,bright,x0 + x, y0 - y);
-    drawLed(color,bright,x0 - x, y0 - y);
-    drawLed(color,bright,x0 + y, y0 + x);
-    drawLed(color,bright,x0 - y, y0 + x);
-    drawLed(color,bright,x0 + y, y0 - x);
-    drawLed(color,bright,x0 - y, y0 - x);
-  }*/
-  //drawLed(blue, brightness(8),12,12);
-  flushBuffer();
-  clearBuffer();
-}
-
-void clock() {
-  continuePattern = true;
-  int animationSpeed = 100;
-  while (continuePattern) {
-
-    drawCircle(white, brightness(8), 12, 12, 12);
-
-  }
-}
-
-void checkerboard() {
-  for (int i = 0; i < 24; i ++) {
-    for (int j = i%2^1; j < 24; j+= 2) {
-      drawLed(white, brightness(8), i,j);
-    }
-  }
-  flushBuffer();
-  clearBuffer();  
-}
-
-void kevinTest() {
-  for (int i = 0; i < 24; i++) {
-    drawLed(yellow, brightness(8), 0, i);
-      flushBuffer();
-  clearBuffer();
-  delay(1000);
-  }
-}
-
-void lineTest() {
-  for (int i = 0; i < 24; i++) {
-    drawLine(white, brightness(8), 0,i, 23, i);
-    flushBuffer();
-    clearBuffer();
-    delay(100);
-  }
-
-}
-
-void whitefull() {
-  int size = 23;
-  int delayTime = 1000;
-  
-  // drawBox(blue,brightness(8),0,0,size,size); 
-  // flushBuffer();
-  // clearBuffer();
-  // delay(delayTime);
-
-  // drawBox(green,brightness(8),0,0,size,size);
-  // flushBuffer();
-  // clearBuffer();
-  // delay(delayTime);
-
-  // drawBox(red,brightness(8),0,0,size,size); 
-  // flushBuffer();
-  // clearBuffer();
-  // delay(delayTime);
-
-  // drawBox(teal,brightness(8),0,0,size,size); 
-  // flushBuffer();
-  // clearBuffer();
-  // delay(delayTime);
-
-  // drawBox(purple,brightness(8),0,0,size,size); 
-  // flushBuffer();
-  // clearBuffer();
-  // delay(delayTime);
-
-  drawBox(white,brightness(8),0,0,size,size); 
-  drawBox(blue,  brightness(8),0,0,0,size);
-  flushBuffer();
-  clearBuffer();
-  delay(delayTime);
-  while(true);
-
-  // drawBox(white,brightness(8),0,0,size,size); 
-  // flushBuffer();
-  // clearBuffer();
-  // delay(delayTime);
-}
-
-void everyColor() {
-  for (int i = 0; i < 24; i++) {
-    for (int j = 0; j < 24; j++) {
-      drawLed(red,brightness(8),i,j);
-      flushBuffer();
-      clearBuffer();
-      //delay();
-    }
-  }
-  for (int i = 0; i < 24; i++) {
-    for (int j = 0; j < 24; j++) {
-      drawLed(green,brightness(8),i,j);
-      flushBuffer();
-      clearBuffer();
-      //(1000);
-    }
-  }
-  for (int i = 0; i < 24; i++) {
-    for (int j = 0; j < 24; j++) {
-      drawLed(blue,brightness(8),i,j);
-      flushBuffer();
-      clearBuffer();
-      //delay(1000);
-    }
-  }
-}
-
-/********************************** TRI-FADE **********************************\
-| This animation fades through the red green and blue colors of the leds       |
-| creating different mixtures of each of the colors.                           |
-|                                                                              |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
-void trifade() {
-  continuePattern = true;
-  int animationSpeed = 200;
-  while (continuePattern) {
-    // blue fade out, red fade in
-    for (int i = 1; i <= 16; i++) {
-      drawBox(blue,correctBrightness(9-i),0,0,3,3);
-      drawBox(red,correctBrightness(i),0,0,3,3);
-      flushBuffer();
-      clearBuffer();
-      delay(animationSpeed);
-    }
-    // red fade out, green fade in
-    for (int i = 1; i <= 16; i++) {
-      drawBox(red,correctBrightness(9-i),0,0,3,3);
-      drawBox(green,correctBrightness(i),0,0,3,3);
-      flushBuffer();
-      clearBuffer();
-      delay(animationSpeed);
-    }
-    // green fade out, blue fade in
-    for (int i = 1; i <= 16; i++) {
-      drawBox(green,correctBrightness(9-i),0,0,3,3);
-      drawBox(blue,correctBrightness(i),0,0,3,3);
-      flushBuffer();
-      clearBuffer();
-      delay(animationSpeed);
-    }
-  }
-}
-
-/******************************** CHASE THE DOT *******************************\
-| A single point of light moves around the cube randomly and changes colors    |
-| when it tries to go out of bounds                                            |
-|                                                                              |
-| Inspired By: Jonah Glick                                                     |
-| Written By: Asher Glick                                                      |
-\******************************************************************************/
-void chaseTheDot() {
-  continuePattern = true;
-  int animationSpeed = 1;
-  
-  int xpos = 0;
-  int ypos = 0;
-  
-  while (continuePattern) {
-    switch(random(0,4)) {
-      case 0:
-        if (xpos > 0) {xpos--;break;}
-        else color=nextColor(color);
-      case 1:
-        if (xpos < 23) {xpos++;break;}
-        else color=nextColor(color);
-        xpos--; break;
-        
-      case 2:
-        if (ypos > 0) {ypos--;break;}
-        else color=nextColor(color);
-      case 3:
-        if (ypos < 23) {ypos++;break;}
-        else color=nextColor(color);
-        ypos--; break;
-      
-    }
-    drawLed(color,brightness(8),xpos,ypos);
-    flushBuffer();
-    clearBuffer();
-    delay(animationSpeed);
-  }
-}
-
 /********************************* PLANAR SPIN ********************************\
 | A plane of light spins around the virtical center of the cube and changes    |
 | colors after a certian number of rotations                                   |
@@ -570,9 +326,9 @@ void chaseTheDot() {
 \******************************************************************************/
 void planarSpin() {
   continuePattern = true;
-  int animationSpeed = 0;
+  int animationSpeed = 20;
   int spinsPerColor = 5; // a spin is actually half a revolution
-  color = yellow;
+  int color = yellow;
   while (continuePattern) {
     int x = 0;
     int y = 0;
@@ -589,9 +345,8 @@ void planarSpin() {
         clearBuffer();
         delay(animationSpeed);
       }
+      clearBuffer();
     }
     color = nextColor(color);
   }
 }
-
-//void 
