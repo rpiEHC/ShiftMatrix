@@ -17,28 +17,28 @@ void loop() {
   planarSpin();
   bars();
   ripples();
-  marqueueText("Welcome to the Smart Lighting Engeneering Research Center");
+  marqueueText("Welcome to the Smart Lighting Engineering Research Center    ",61);
 }
 
-void marqueueText(char* text) {
+void marqueueText(char* text, int length) {
   int letter = 0;
-  int length = 0;
-  while(text[length] != 0) length++;
+  // int length = 0;
+  // while(text[length] != 0) length++;
 
-  char* newText = (char*)malloc(sizeof(char)*(length+4));
+  // char* newText = (char*)malloc(sizeof(char)*(length+4));
   
-  newText[0] = ' ';
-  newText[1] = ' ';
-  newText[2] = ' ';
-  newText[3] = ' ';
-  while(text[letter] != 0){
-    newText[letter+4] = text[letter];
-    letter++;
-  }
+  // newText[0] = ' ';
+  // newText[1] = ' ';
+  // newText[2] = ' ';
+  // newText[3] = ' ';
+  // while(text[letter] != 0){
+  //   newText[letter+4] = text[letter];
+  //   letter++;
+  // }
 
-  letter = 0;
-  text = newText;
-  while(text[letter] != 0) {
+  // letter = 0;
+  // text = newText;
+  while(letter < length) {
     for (int i = 0; i < 7; i++) {
       // drawLetter(white, brightness(8), 0-i, 0, letter);
       // drawLetter(white, brightness(8), 6-i, 0, letter+1);
