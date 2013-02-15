@@ -10,6 +10,7 @@ void setup () {
   //flushBuffer();
   animationMax = 60;
 }
+
 void loop() {    
   shiftingSquares();
   raindrops();
@@ -17,11 +18,12 @@ void loop() {
   planarSpin();
   bars();
   ripples();
-  marqueueText("Welcome to the Smart Lighting Engineering Research Center    ",61);
+  marqueueText("    Welcome to the Smart Lighting Engineering Research Center    ",65);
 }
 
 void marqueueText(char* text, int length) {
   int letter = 0;
+  int color = random(0,6);
   // int length = 0;
   // while(text[length] != 0) length++;
 
@@ -46,11 +48,11 @@ void marqueueText(char* text, int length) {
       // drawLetter(white, brightness(8), 18-i, 0, letter+3);
       // drawLetter(white, brightness(8), 24-i, 0, letter+4);
 
-      drawLetter(white, brightness(8), 0-i,  8, text[letter]);
-      drawLetter(white, brightness(8), 5-i+2,  8, text[letter+1]);
-      drawLetter(white, brightness(8), 10-i+4, 8, text[letter+2]);
-      drawLetter(white, brightness(8), 15-i+6, 8, text[letter+3]);
-      drawLetter(white, brightness(8), 20-i+8, 8, text[letter+4]);
+      drawLetter(color, brightness(8), 0-i,  8, text[letter]);
+      drawLetter(color, brightness(8), 5-i+2,  8, text[letter+1]);
+      drawLetter(color, brightness(8), 10-i+4, 8, text[letter+2]);
+      drawLetter(color, brightness(8), 15-i+6, 8, text[letter+3]);
+      drawLetter(color, brightness(8), 20-i+8, 8, text[letter+4]);
 
       // drawLetter(white, brightness(8), 0-i,  16, letter+8);
       // drawLetter(white, brightness(8), 6-i,  16, letter+9);
@@ -64,7 +66,7 @@ void marqueueText(char* text, int length) {
     }
     letter++;
   }
-  free(newText);
+  // free(newText);
 }
 
 //ripples----------------------------------------------------------------------------------
