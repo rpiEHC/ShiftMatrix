@@ -8,14 +8,16 @@ void setup () {
   //digitalWrite(13,HIGH);
   //drawLed(red,FULL,0,0);
   //flushBuffer();
-  animationMax = 60;
+  animationMax = 20;
 }
 
-void loop() {    
-  shiftingSquares();
-  raindrops();
-  circleTest();
+void loop() {
+  //marqueueText("    HELLO WORLD    ",19);
   planarSpin();
+  shiftingSquares();
+  //raindrops(false); // Blue Drops
+  raindrops(true); // Random Colors
+  circleTest();
   bars();
   ripples();
   marqueueText("    Welcome to the Smart Lighting Engineering Research Center    ",65);
@@ -279,39 +281,55 @@ void shiftingSquares() {
 
 
 //Raindrops------------------------------------------------------------------
-void raindrops() {
+void raindrops(boolean isRandom) {
   continuePattern = true;
   int animationSpeed = 30;
-  int dropHeight[] = {0,0,0};
-  dropHeight[0] = 0-random(0,8);
-  dropHeight[1] = 0-random(0,8)+8;
-  dropHeight[2] = 0-random(0,8)+16;
-  int dropColumn[] = {0,0,0};
-  dropColumn[0] = random(0,24);
-  dropColumn[1] = random(0,24);
-  dropColumn[2] = random(0,24);
+  int dropletCount = 8;
+  int dropHeight[dropletCount];
+  int dropletSpacing = 24/dropletCount; // How close are the droplets
+  for (int i = 0; i < dropletCount; i++) {
+    dropHeight[i] = 0-random(0,8)+i*dropletSpacing;
+  }
+  int dropColumn[dropletCount];
+  for (int i = 0; i < dropletCount; i++) {
+    dropColumn[0] = random(0,24);
+  }
+  
+  int colors[dropletCount];
+  for (int i = 0 ; i <dropletCount; i++) {
+    if (isRandom) {
+      colors[i] = random(0,7);
+    }
+    else {
+      colors[i] = blue;
+    }
+  }
+  
   while (continuePattern) {
 
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < dropletCount; i++){
       if (dropHeight[i] < 24){
-        drawLed(blue, brightness(8), dropHeight[i], dropColumn[i]);
+        drawLed(colors[i], brightness(8), dropHeight[i], dropColumn[i]);
       }
       else if (dropHeight[i] == 24) {
-        drawLed(blue, brightness(8), 22, dropColumn[i]+1);
-        drawLed(blue, brightness(8), 22, dropColumn[i]-1);
+        drawLed(colors[i], brightness(8), 22, dropColumn[i]+1);
+        drawLed(colors[i], brightness(8), 22, dropColumn[i]-1);
       }
       else if (dropHeight[i] == 25) {
-        drawLed(blue, brightness(8), 22, dropColumn[i]+2);
-        drawLed(blue, brightness(8), 22, dropColumn[i]-2);
+        drawLed(colors[i], brightness(8), 22, dropColumn[i]+2);
+        drawLed(colors[i], brightness(8), 22, dropColumn[i]-2);
       }
       else if (dropHeight[i] == 26) {
-        drawLed(blue, brightness(8), 23, dropColumn[i]+3);
-        drawLed(blue, brightness(8), 23, dropColumn[i]-3);
+        drawLed(colors[i], brightness(8), 23, dropColumn[i]+3);
+        drawLed(colors[i], brightness(8), 23, dropColumn[i]-3);
       }
       dropHeight[i]++;
       if (dropHeight[i] == 27) {
         dropHeight[i] = 0-random(0,8);
         dropColumn[i] = random(0,24);
+        if (isRandom) {
+          colors[i] = random(0,7);
+        }
       }
     }
     flushBuffer();
@@ -326,29 +344,48 @@ void raindrops() {
 |                                                                              |
 | Written By: Asher Glick                                                      |
 \******************************************************************************/
+void planerSpinDrawLine(int rotation, int color) {
+  if (rotation < 23) {
+    int x = rotation;
+    //drawLine(color,brightness(8),x,0,23-x,23);
+    drawLine(color,brightness(8),23-x,0,x,23);
+  }
+  else {
+    int y = rotation - 23;
+    //drawLine(color,brightness(8),23,y,0,23-y);
+    drawLine(color,brightness(8),23,23-y,0,y);  
+  }
+}
 void planarSpin() {
   continuePattern = true;
-  int animationSpeed = 20;
+  int animationSpeed = 1;
   int spinsPerColor = 5; // a spin is actually half a revolution
-  int color = yellow;
-  while (continuePattern) {
-    int x = 0;
-    int y = 0;
-    for (int i = 0; i < spinsPerColor; i++) {
-      for (int x = 0; x < 23; x++) {
-        drawLine(color,brightness(8),x,0,23-x,23);
-        flushBuffer();
-        clearBuffer();
-        delay(animationSpeed);
-      }
-      for (int y = 0; y < 23; y++) {
-        drawLine(color,brightness(8),23,y,0,23-y);
-        flushBuffer();
-        clearBuffer();
-        delay(animationSpeed);
-      }
+  //int color = yellow;
+  //i/nt color2 = red;
+  
+  int rotation[] = {0,0,0};
+  int rotations[] = {0,0,0};
+  int color[] = {0,1,2};
+  
+  while (continuePattern){
+    for (int i = 0; i < 3; i++) {
+      planerSpinDrawLine ( rotation[0], color[0] );
+      planerSpinDrawLine ( rotation[1], color[1] );
+      planerSpinDrawLine ( rotation[2], color[2] );
+      flushBuffer();
       clearBuffer();
+      for (int j = 0; j <= i; j++) {
+        rotation[j]++;
+        if (rotation[j] >= 46) {
+          rotation[j] = 0;
+          rotations[j] ++;
+          if (rotations[j] > spinsPerColor) {
+            color[j] = nextColor(color[j]);
+            rotation[j] = 0;
+          }
+        }
+      }
+      delay(animationSpeed);
     }
-    color = nextColor(color);
   }
 }
